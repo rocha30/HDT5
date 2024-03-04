@@ -13,10 +13,10 @@ INTERVALO = 10  # Intervalo de tiempo entre la creación de cada proceso
 INSTRUCCIONES_POR_CICLO = 3  # Número de instrucciones que se pueden ejecutar en un ciclo de CPU
 
 # Función que simula un proceso en el sistema
-def proceso(env, nombre, cpu, ram, memoria_necesaria, instruciones, timepo_proceso):
+def proceso(env, nombre, cpu, ram, memoria_necesaria, Instrucciones, tiempos_procesos):
     tiempo_inicio = env.now # Tiempo de inicio del proceso
     # Mensaje de creación del proceso
-    print(f'{tiempo_inicio}: {nombre} creado, necesita {memoria_necesaria} de memoria, instrucciones {instruciones}')
+    print(f'{tiempo_inicio}: {nombre} creado, necesita {memoria_necesaria} de memoria, instrucciones {Instrucciones}')
     
      # Solicitar RAM (Paso de New a Ready)
     with ram.get(memoria_necesaria) as request:
@@ -25,7 +25,7 @@ def proceso(env, nombre, cpu, ram, memoria_necesaria, instruciones, timepo_proce
         print(f'{env.now}: {nombre} ha obtenido la memoria necesaria y está en READY')
 
         # Ciclo para ejecutar todas las instrucciones del proceso
-        while instructions > 0:
+        while Instrucciones > 0:
              # Solicitar uso del CPU (Paso de Ready a Running)
             with cpu.request() as req:
                 yield req
@@ -34,12 +34,12 @@ def proceso(env, nombre, cpu, ram, memoria_necesaria, instruciones, timepo_proce
                 
                 # Simular ejecución de instrucciones durante un ciclo de CPU
                 yield env.timeout(1)  # Representa un ciclo de CPU
-                instructions -= min(INSTRUCCIONES_POR_CICLO, instructions)
+                Instrucciones -= min(INSTRUCCIONES_POR_CICLO, Instrucciones)
                  # Mensaje indicando instrucciones restantes
-                print(f'{env.now}: {nombre} ha ejecutado instrucciones, restantes {instructions}')
+                print(f'{env.now}: {nombre} ha ejecutado instrucciones, restantes {Instrucciones}')
 
                 # Verificar si el proceso ha terminado
-                if instructions <= 0:
+                if Instrucciones <= 0:
                     print(f'{env.now}: {nombre} ha TERMINATED')
                     break
                 else:
@@ -92,7 +92,7 @@ def guardar_tiempos_a_csv(tiempos_procesos, nombre_archivo_tiempos):
         writer = csv.writer(file)
         writer.writerow(['Proceso','Tiempo de Inicio', 'Tiempo de finalizacion'])
         total_veces = []
-        for tiempo in tiempo: 
+        for tiempo in total_veces: 
             writer.writerow(tiempo)
             tiempo_total = tiempo[2]- tiempo[1]
             total_veces.append(tiempo_total)
