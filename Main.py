@@ -6,9 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parámetros de configuración
-RAM_CAPACITY = 100  # Capacidad de la RAM
-CPU_SPEED = 1  # Velocidad del CPU
-NUM_PROCESSES = 25  # Número total de procesos a simular
+RAM_CAPACITY = 200  # Capacidad de la RAM
+CPU_SPEED = 2  # Velocidad del CPU
+NUM_PROCESSES = 200  # Número total de procesos a simular
 INTERVAL = 10  # Intervalo de tiempo entre la creación de cada proceso
 INSTRUCTIONS_PER_CYCLE = 3  # Número de instrucciones que se pueden ejecutar en un ciclo de CPU
 

@@ -1,0 +1,26 @@
+Proceso,Tiempo de Inicio,Tiempo de Finalización
+Proceso 0,0,3
+Proceso 1,4,5
+Proceso 2,7,8
+Proceso 3,8,9
+Proceso 4,10,11
+Proceso 5,11,12
+Proceso 6,15,17
+Proceso 7,18,21
+Proceso 8,21,23
+Proceso 9,23,25
+Proceso 10,24,28
+Proceso 11,28,30
+Proceso 12,32,33
+Proceso 13,37,42
+Proceso 14,40,44
+Proceso 15,41,46
+Proceso 16,44,47
+Proceso 17,46,51
+Proceso 18,48,51
+Proceso 19,50,54
+Proceso 20,52,56
+Proceso 21,54,57
+Proceso 23,61,62
+Proceso 22,57,63
+Proceso 24,66,70
