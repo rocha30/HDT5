@@ -4,6 +4,7 @@ import simpy
 import random
 import pandas as pd
 from datetime import datetime
+import matplotlib as plt 
 
 # Parámetros de configuración
 CAPACIDAD_RAM = 100  # Capacidad de la RAM
@@ -70,21 +71,6 @@ def generar_procesos(env, cpu, ram, tiempos_procesos):
         yield env.timeout(random.randint(1, INTERVALO))
 
 
-# Función para guardar datos de CPU en un archivo CSV
-def guardar_datos_cpu(cpu_log, nombre_archivo):
-    df_cpu = pd.DataFrame(cpu_log, columns=['Tiempo', 'Estado'])
-    df_cpu.to_csv(nombre_archivo, index=False)
-
-# Función para guardar datos de RAM en un archivo CSV
-def guardar_datos_ram(ram_log, nombre_archivo):
-    df_ram = pd.DataFrame(ram_log, columns=['Tiempo', 'Estado'])
-    df_ram.to_csv(nombre_archivo, index=False)
-
-# Función para guardar tiempos de inicio y finalización en un archivo CSV
-def guardar_tiempos_a_csv(tiempos, nombre_archivo):
-    df = pd.DataFrame(tiempos, columns=['Proceso', 'Tiempo de inicio', 'Tiempo final'])
-    df.to_csv(nombre_archivo, index=False)
-
 
 # Guardar datos en archivos CSV
 def guardar_tiempos_a_csv(tiempos_procesos, nombre_archivo_tiempos):
@@ -112,8 +98,39 @@ env.process(generar_procesos(env, cpu, ram, tiempos_procesos))
 env.run()
 
 # Crear el nombre de archivo CSV con una marca de tiempo para evitar sobrescrituras
-nombre_archivo_tiempos = f'tiempos_{NUM_PROCESOS}_procesos_{datetime.now().strftime("%Y%m%d%H%M%S")}.csv'
+nombre_archivo_tiempos = f'tiempos_{NUM_PROCESOS}_procesos_{datetime.now():%Y%m%d%H%M%S}.csv'
 avg_tiempo, std_dev_tiempo, total_veces = guardar_tiempos_a_csv(tiempos_procesos, nombre_archivo_tiempos)
 
+
 # Mostrar estadísticas
-print(f"Tiempo promedio: {avg_tiempo}, Desviación Estándar: {std_dev_tiempo}")
+print(f"Estadísticas de Tiempos de Ejecución:")
+print(f"  - Tiempo promedio: {avg_tiempo}")
+print(f"  - Desviación Estándar: {std_dev_tiempo}")
+
+# Cargar datos del CSV
+df_tiempos = pd.read_csv(nombre_archivo_tiempos)
+
+# Gráfico de barras para tiempos de inicio y fin
+fig, ax = plt.subplots(figsize=(10, 6))
+df_tiempos[['Tiempo de Inicio', 'Tiempo de finalizacion']].plot(kind='bar', x=df_tiempos['Proceso'], ax=ax)
+plt.title('Tiempos de Inicio y Finalización de Procesos')
+plt.xlabel('Proceso')
+plt.ylabel('Tiempo')
+plt.show()
+
+# Gráfico de dispersión para mostrar la distribución de los tiempos de ejecución
+fig, ax = plt.subplots(figsize=(10, 6))
+df_tiempos['Tiempo de Ejecucion'] = df_tiempos['Tiempo de finalizacion'] - df_tiempos['Tiempo de Inicio']
+plt.scatter(df_tiempos['Proceso'], df_tiempos['Tiempo de Ejecucion'])
+plt.title('Distribución de Tiempos de Ejecución de Procesos')
+plt.xlabel('Proceso')
+plt.ylabel('Tiempo de Ejecucion')
+plt.show()
+
+# Histograma para la frecuencia de los tiempos de ejecución
+fig, ax = plt.subplots(figsize=(10, 6))
+plt.hist(df_tiempos['Tiempo de Ejecucion'], bins=10, edgecolor='black')
+plt.title('Histograma de Tiempos de Ejecución de Procesos')
+plt.xlabel('Tiempo de Ejecucion')
+plt.ylabel('Frecuencia')
+plt.show()
